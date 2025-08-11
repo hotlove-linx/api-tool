@@ -12,9 +12,9 @@ let appTray = null;
 let win;
 function createWindow() {
   win = new BrowserWindow({
-    width: 1e3,
+    width: 1300,
     minWidth: 1e3,
-    height: 670,
+    height: 770,
     minHeight: 670,
     resizable: false,
     // width: 310,

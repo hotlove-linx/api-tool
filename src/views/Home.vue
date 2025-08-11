@@ -3,7 +3,8 @@
     <!-- 页面头部 -->
     <div class="home-header">
       <span class="header-logo">
-        <span>Fun</span>
+<!--        <span>Fun</span>-->
+        <img src="../assets/e-do-blue.png"></img>
       </span>
       <span class="header-oper">
         <span class="header-min iconfont icon-line"></span>
@@ -12,26 +13,20 @@
     </div>
 
     <!-- 导航 -->
-    <el-row>
-      <el-col :span="2">
-        <div class="home-navi">
-          <div class="navi-item" :class="clickType == 'api' ? 'navi-click' : ''" @click="clickItem('api')">
-            <span class="iconfont icon-api"></span>
-            <span>api</span>
-          </div>
-          <div class="navi-item" :class="clickType == 'tool' ? 'navi-click': ''" @click="clickItem('tool')">
-            <span class="iconfont icon-gongju"></span>
-            <span>tool</span>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="22">
-        <!-- 右侧内容 -->
-        <div class="home-content">
-          <router-view></router-view>
-        </div>
-      </el-col>
-    </el-row>
+    <div class="home-navi">
+      <div class="navi-item" :class="clickType == 'api' ? 'navi-click' : ''" @click="clickItem('api')">
+        <span class="iconfont icon-api"></span>
+        <span>api</span>
+      </div>
+      <div class="navi-item" :class="clickType == 'tool' ? 'navi-click': ''" @click="clickItem('tool')">
+        <span class="iconfont icon-gongju"></span>
+        <span>tool</span>
+      </div>
+    </div>
+    <!-- 右侧内容 -->
+    <div class="home-content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -55,12 +50,13 @@ const clickItem = (type: string) => {
 <style lang="scss">
 .home {
   position: relative;
-  padding: 5px 0;
   height: 100vh;
   width: 100%;
 
   /* 头部 */
   .home-header {
+    position: relative;
+    background: #f9f9f9;
     width: 100%;
     -webkit-app-region: drag;
     height: 48px;
@@ -71,12 +67,22 @@ const clickItem = (type: string) => {
     }
 
     .header-logo {
+      float: left;
       width: 20%;
       text-align: left;
       font-size: 20px;
-      padding-left: 10px;
+      padding-left: 20px;
+      height: 48px;
+      line-height: 62px;
+
+      img {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+      }
     }
     .header-oper {
+      float: right;
       width: 78%;
       text-align: right;
       .header-min {
@@ -112,6 +118,7 @@ const clickItem = (type: string) => {
   }
 
   .home-navi {
+    background: #f9f9f9;
     display: inline-block;
     height: calc(100vh - 48px);
     width: 70px;
@@ -140,9 +147,9 @@ const clickItem = (type: string) => {
   }
 
   .home-content {
-    padding: 10px;
+    float: right;
     display: inline-block;
-    width: calc(100% - 1px);
+    width: calc(100% - 81px);
     height: calc(100vh - 55px);
   }
 
