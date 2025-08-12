@@ -3,7 +3,7 @@
     <!-- 导航 -->
     <div class="api-navi">
       <div class="api-navi-header">
-        <span class="api-header-add iconfont icon-jia"></span>
+        <span class="api-header-add iconfont icon-jia" @click="addCollection"></span>
         <span class="api-header-search">
             <el-input
                 v-model="searchCollectionName"
@@ -17,45 +17,49 @@
         <el-tree
             style="max-width: 600px; background: #f9f9f9"
             :data="dataSource"
+            empty-text="No Request"
             node-key="id"
             default-expand-all
             :expand-on-click-node="false">
           <template #default="{ node, data }">
-            <el-icon v-if="!node.isLeaf" class="tree-show-oper el-icon--left">
+            <el-icon v-if="data.type == 'folder'"  class="tree-show-oper el-icon--left">
               <Folder v-if="!node.expanded" />
               <FolderOpened v-else/>
             </el-icon>
             <div class="tree-show-oper custom-tree-node">
-                  <span class="node-label">
-                    <span class="node-method" :class="data.method">{{ data.method }}</span>
-                    <span class="label-name">{{ node.label }}</span>
-                  </span>
-              <span v-if="!node.isLeaf" class="node-oper">
-                    <el-dropdown trigger="click">
-                    <span  class="iconfont icon-shenglvehao"></span>
-                    <template #dropdown>
-                      <el-dropdown-menu>
-                        <el-dropdown-item>Add Request</el-dropdown-item>
-                        <el-dropdown-item>Add Folder</el-dropdown-item>
-                        <el-dropdown-item>Rename</el-dropdown-item>
-                        <el-dropdown-item>Delete</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </template>
-                  </el-dropdown>
-                  </span>
-              <span v-if="node.isLeaf" class="node-oper">
-                    <el-dropdown trigger="click">
-                    <span  class="iconfont icon-shenglvehao"></span>
-                    <template #dropdown>
-                      <el-dropdown-menu>
-                        <el-dropdown-item>Rename</el-dropdown-item>
-                        <el-dropdown-item>Delete</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </template>
-                  </el-dropdown>
+                <!-- 编辑框 -->
+                <span v-if="data.status !='complete'">
+                    <el-input
+                        v-model="folderName"
+                        style="width: 100%"
+                        size="small"
+                        placeholder="Please Input"
+                        @keyup.enter="updateFolderName(data)"
+                    />
+                </span>
 
-                  </span>
-              <span v-if="!node.isLeaf" class="node-oper iconfont icon-jia"></span>
+                <!-- 名称展示 -->
+                <span v-if="data.status =='complete' " class="node-label">
+                  <span v-if="data.type == 'file'" class="node-method" :class="data.method">{{ data.method }}</span>
+                  <span class="label-name">{{ data.name }}</span>
+                </span>
+
+                <!-- 操作 -->
+                <span  class="node-oper" :class="data.oper == 'show' ? 'show-oper':''">
+                    <el-dropdown v-if="data.status == 'complete'" trigger="click">
+                      <span  class="iconfont icon-shenglvehao" @click="showOper(data)"></span>
+                      <template #dropdown>
+                        <el-dropdown-menu>
+                          <el-dropdown-item v-if="data.type == 'folder'" @click="addFile(data)">Add Request</el-dropdown-item>
+                          <el-dropdown-item v-if="data.type == 'folder'" @click="addSubCollection(data)">Add Folder</el-dropdown-item>
+                          <el-dropdown-item @click="renameTreeItem(data)">Rename</el-dropdown-item>
+                          <el-dropdown-item @click="deleteTreeItem(node, data)">Delete</el-dropdown-item>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
+                </span>
+
+                <span v-if="data.type=='folder' && data.status == 'complete'" class="node-oper iconfont icon-jia" @click="addFile(data)"></span>
             </div>
           </template>
         </el-tree>
@@ -70,49 +74,79 @@
 <script setup lang="ts">
 import {ref} from "vue"
 import {Search} from "@element-plus/icons-vue";
-interface Tree {
-  id: number
-  label: string
-  method?: string
-  children?: Tree[]
-}
+import {TreeItem} from "../domain/TreeDomain.ts"
+import {CommonUtil} from "../common/CommonUtil.ts"
+
+const dataSource = ref<TreeItem[]>([])
+
+const folderName = ref<string>("")
+
 
 const searchCollectionName = ref<string>("")
 
-const dataSource = ref<Tree[]>([
-  {
-    id: 1,
-    label: 'Aimind平台接口',
-    children: [
-      {
-        id: 9,
-        label: '新增用户接口',
-        method: 'POST',
-      },
-      {
-        id: 10,
-        label: '删除用户接口',
-        method: 'DEL',
-      }
-    ],
-  },
-  {
-    id: 2,
-    label: 'turing接口',
-    children: [
-      {
-        id: 5,
-        label: '查询向量接口',
-        method: 'GET',
-      },
-      {
-        id: 6,
-        label: '修改向量值',
-        method: 'PUT',
-      },
-    ],
+const addCollection = () => {
+  let item: TreeItem = {
+    id: CommonUtil.getUUID(),
+    type: "folder",
+    name: "",
+    method: "",
+    status: "add",
+    oper: "hidden",
+    children: []
   }
-])
+  dataSource.value.push(item)
+}
+
+const addSubCollection = (parent: TreeItem) => {
+  let item: TreeItem = {
+    id: CommonUtil.getUUID(),
+    type: "folder",
+    name: "",
+    method: "",
+    status: "add",
+    oper: "hidden",
+    children: []
+  }
+  parent.children.push(item)
+  parent.oper = "hidden"
+}
+
+const addFile = (data: TreeItem) => {
+  let item: TreeItem = {
+    id: CommonUtil.getUUID(),
+    type: "file",
+    name: "New Request",
+    method: "GET",
+    status: "complete",
+    oper: "hidden",
+    children: []
+  }
+  data.children.push(item)
+  data.oper = "hidden"
+}
+
+const deleteTreeItem = (node: Node, data: TreeItem) => {
+  const parent = node.parent
+  const children: TreeItem[] = parent.data.children || parent.data
+  const index = children.findIndex((d) => d.id === data.id)
+  children.splice(index, 1)
+}
+
+const updateFolderName = (item: TreeItem) => {
+  item.name = folderName.value
+  item.status = "complete"
+  folderName.value = ""
+}
+
+const renameTreeItem = (item: TreeItem) => {
+  item.status = "edit"
+  folderName.value = item.name
+  item.oper = "hidden"
+}
+
+const showOper = (item: TreeItem) => {
+  item.oper = "show"
+}
 
 </script>
 
@@ -191,6 +225,10 @@ const dataSource = ref<Tree[]>([
           margin-right: 5px;
           visibility: hidden;
         }
+      }
+
+      .show-oper {
+        visibility: visible !important;
       }
 
       .tree-show-oper:hover .node-oper {
