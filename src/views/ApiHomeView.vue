@@ -67,7 +67,9 @@
     </div>
 
     <!--内容-->
-    <div class="api-content"></div>
+    <div class="api-content">
+      <router-view keep-alive></router-view>
+    </div>
   </div>
 </template>
 
