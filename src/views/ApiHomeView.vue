@@ -39,7 +39,7 @@
                 </span>
 
                 <!-- 名称展示 -->
-                <span v-if="data.status =='complete' " class="node-label">
+                <span v-if="data.status =='complete' " class="node-label" @click="goInfo(data)">
                   <span v-if="data.type == 'file'" class="node-method" :class="data.method">{{ data.method }}</span>
                   <span class="label-name">{{ data.name }}</span>
                 </span>
@@ -78,6 +78,10 @@ import {ref} from "vue"
 import {Search} from "@element-plus/icons-vue";
 import {TreeItem} from "../domain/TreeDomain.ts"
 import {CommonUtil} from "../common/CommonUtil.ts"
+import {useRouter} from "vue-router";
+
+// 路由
+const router = useRouter();
 
 const dataSource = ref<TreeItem[]>([])
 
@@ -148,6 +152,12 @@ const renameTreeItem = (item: TreeItem) => {
 
 const showOper = (item: TreeItem) => {
   item.oper = "show"
+}
+
+const goInfo = (data: TreeItem) => {
+  if (data.type == "file") {
+    router.push({name: "api-info", params: {id: data.id}})
+  }
 }
 
 </script>
@@ -240,10 +250,10 @@ const showOper = (item: TreeItem) => {
   }
 
   .api-content {
+    vertical-align: bottom;
     display: inline-block;
     width: calc(100% - 323px);
     height: calc(100vh - 50px);
-    background: darkgray;
   }
 }
 </style>
