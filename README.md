@@ -1,5 +1,5 @@
 # 技术栈
-Vue 3 + TypeScript + Vite
+Vue 3 + TypeScript + Vite + Electron
 
 # 说明
 api测试工具
