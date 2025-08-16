@@ -253,7 +253,7 @@ const goInfo = (data: TreeItem) => {
     vertical-align: bottom;
     display: inline-block;
     width: calc(100% - 321px);
-    height: calc(100vh - 50px);
+    //height: calc(100vh - 50px);
   }
 }
 </style>
