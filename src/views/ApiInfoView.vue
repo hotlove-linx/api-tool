@@ -38,10 +38,10 @@
     <!-- 参数列表及结果 -->
     <div class="api-info-result">
       <el-splitter layout="vertical">
-        <el-splitter-panel>
+        <el-splitter-panel :min="100">
           <div class="demo-panel">1</div>
         </el-splitter-panel>
-        <el-splitter-panel>
+        <el-splitter-panel :min="100">
           <div class="demo-panel">2</div>
         </el-splitter-panel>
       </el-splitter>
@@ -88,6 +88,11 @@ const sendUrl = ref<string>();
   }
 
   .api-info-result {
+    padding: 10px;
+    display: inline-block;
+    width: calc(100% - 32px);
+    background-color: #F56C6C;
+    height: calc(100vh - 163px);
     .demo-panel {
       display: flex;
       align-items: center;

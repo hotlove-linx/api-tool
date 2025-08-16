@@ -7,6 +7,7 @@
         <img src="../assets/e-do-blue.png"></img>
       </span>
       <span class="header-oper">
+        <el-avatar class="header-avatar" :size="32" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
         <span class="header-min iconfont icon-line"></span>
         <span class="header-close iconfont icon-close"></span>
       </span>
@@ -55,7 +56,7 @@ const clickItem = (type: string) => {
 
   /* 头部 */
   .home-header {
-    position: relative;
+    display: flex;
     background: #f9f9f9;
     width: 100%;
     -webkit-app-region: drag;
@@ -67,7 +68,8 @@ const clickItem = (type: string) => {
     }
 
     .header-logo {
-      float: left;
+      display: flex;
+      align-items: center;
       width: 20%;
       text-align: left;
       font-size: 20px;
@@ -82,9 +84,16 @@ const clickItem = (type: string) => {
       }
     }
     .header-oper {
-      float: right;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
       width: 78%;
       text-align: right;
+      .header-avatar {
+        margin-right: 20px;
+        // box-shadow: var(--el-box-shadow-light);
+        border: 1px solid #b7b7b7;
+      }
       .header-min {
         cursor: pointer;
         margin-right: 5px;
