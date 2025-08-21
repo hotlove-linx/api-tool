@@ -441,7 +441,8 @@ const deleteQuery = (item: QueryDomain, type: string) => {
     padding: 10px;
     display: inline-block;
     width: calc(100% - 32px);
-    //height: calc(100vh - 163px);
+    height: calc(100vh - 163px);
+    overflow: hidden;
     .api-request {
       width: 100%;
 
