@@ -17,7 +17,7 @@
 /*}*/
 /*---滚动条大小--*/
 ::-webkit-scrollbar{
-    width:0px;
+    width:0px !important;
     height:4px;
 }
 /*---滚动框背景样式--*/

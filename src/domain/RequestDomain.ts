@@ -1,4 +1,4 @@
-export interface QueryDomain {
+interface BaseDomain {
     id: string;
     key: string;
     value: string;
@@ -7,23 +7,21 @@ export interface QueryDomain {
     check: boolean;
 }
 
-export interface HeaderDomain {
-    id: string;
-    key: string;
-    value: string;
-    desc: string;
-    status: string;
-    check: boolean;
+export interface QueryDomain extends BaseDomain{
 }
 
-export interface BodyDomain {
-    id: string;
-    type: number;
-    key: string;
-    value: string;
-    desc: string;
-    status: string;
-    check: boolean;
+export interface HeaderDomain extends BaseDomain {
+}
+
+export interface BodyDomain extends BaseDomain{
+}
+
+export interface FormDataDomain extends BaseDomain{
+    keyType: string;
+    filePath: string;
+}
+
+export interface UrlEncodeDomain extends BaseDomain{
 }
 
 export interface HeaderOption {
