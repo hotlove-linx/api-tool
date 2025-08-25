@@ -250,6 +250,7 @@
                     </template>
                   </el-table-column>
                 </el-table>
+                <vue-json-pretty v-if="bodyType == 4" :data="{ 'key': 'value' }" :editable="true"/>
                 <div v-if="bodyType == 2 || bodyType == 3" class="query-tail iconfont icon-jia" @click="addQuery('body')"></div>
               </el-tab-pane>
 
@@ -265,6 +266,8 @@
 </template>
 
 <script setup lang="ts">
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 import {ref} from 'vue';
 import {HeaderDomain, QueryDomain, FormDataDomain, UrlEncodeDomain} from "@/domain/RequestDomain.ts";
 
