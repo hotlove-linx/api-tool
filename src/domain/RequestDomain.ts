@@ -1,4 +1,4 @@
-interface BaseDomain {
+export interface BaseDomain {
     id: string;
     key: string;
     value: string;

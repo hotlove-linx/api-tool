@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
+    "codemirror": "^5.65.20",
+    "codemirror-editor-vue3": "^2.8.0",
     "element-plus": "^2.10.6",
     "vue": "^3.4.21",
     "vue-json-editor": "^1.4.3",

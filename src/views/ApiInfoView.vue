@@ -46,49 +46,7 @@
                 <div class="query-header">
                   Query Params
                 </div>
-                <el-table :data="queryTableData" :class="queryTableData.length == 0 ? 'query-table' : ''" empty-text="" style="width: 100%" border >
-                  <el-table-column width="40">
-                    <template #default="scope">
-                      <el-checkbox v-model="scope.row.check"></el-checkbox>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Key">
-                    <template #default="scope">
-                      <el-input v-if="scope.row.status == 'edit'"
-                                v-model="scope.row.key"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)"/>
-                      <span class="query-item" v-else @dblclick="editQuery(scope.row)">{{ scope.row.key }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Value">
-                    <template #default="scope">
-                      <el-input v-if="scope.row.status == 'edit'"
-                                v-model="scope.row.value"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)"/>
-                      <span class="query-item" v-else @dblclick="editQuery(scope.row, )">{{ scope.row.value }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Description">
-                    <template #default="scope">
-                      <el-input v-if="scope.row.status == 'edit'"
-                                v-model="scope.row.desc"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)"/>
-                      <span class="query-item" v-else @dblclick="editQuery(scope.row, )">{{ scope.row.desc }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column width="45">
-                    <template #default="scope">
-                      <span class="query-item query-item-del iconfont icon-line" @click="deleteQuery(scope.row, 'query')"></span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-                <div class="query-tail iconfont icon-jia" @click="addQuery('query')"></div>
+                <ApiParams v-model="queryTableData" type="param"></ApiParams>
               </el-tab-pane>
 <!--              <el-tab-pane label="Authorization" name="authorization">Task</el-tab-pane>-->
               <!-- 请求头 -->
@@ -96,49 +54,7 @@
                 <div class="query-header">
                   Headers
                 </div>
-                <el-table :data="headerTableData" :class="headerTableData.length == 0 ? 'query-table' : ''" empty-text="" style="width: 100%" border >
-                  <el-table-column width="40">
-                    <template #default="scope">
-                      <el-checkbox v-model="scope.row.check"></el-checkbox>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Key">
-                    <template #default="scope">
-                      <el-input v-if="scope.row.status == 'edit'"
-                                v-model="scope.row.key"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)"/>
-                      <span class="query-item" v-else @dblclick="editQuery(scope.row)">{{ scope.row.key }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Value">
-                    <template #default="scope">
-                      <el-input v-if="scope.row.status == 'edit'"
-                                v-model="scope.row.value"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)"/>
-                      <span class="query-item" v-else @dblclick="editQuery(scope.row, )">{{ scope.row.value }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Description">
-                    <template #default="scope">
-                      <el-input v-if="scope.row.status == 'edit'"
-                                v-model="scope.row.desc"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)"/>
-                      <span class="query-item" v-else @dblclick="editQuery(scope.row, )">{{ scope.row.desc }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column width="45">
-                    <template #default="scope">
-                      <span class="query-item query-item-del iconfont icon-line" @click="deleteQuery(scope.row, 'header')"></span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-                <div class="query-tail iconfont icon-jia" @click="addQuery('header')"></div>
+                <ApiParams v-model="headerTableData" type="param"></ApiParams>
               </el-tab-pane>
 
               <!-- 请求体 -->
@@ -151,107 +67,17 @@
                     <el-radio :value="4">raw</el-radio>
                   </el-radio-group>
                 </div>
-                <el-table v-if="bodyType == 2" :data="formDataTableData" :class="formDataTableData.length == 0 ? 'query-table' : ''" empty-text="" style="width: 100%" border >
-                  <el-table-column width="40">
-                    <template #default="scope">
-                      <el-checkbox v-model="scope.row.check"></el-checkbox>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Key">
-                    <template #default="scope">
-                      <el-input v-if="scope.row.status == 'edit'"
-                                v-model="scope.row.key"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)">
-                        <template #append>
-                          <el-select  v-model="scope.row.keyType" style="width: 72px">
-                            <el-option label="File" value="file" />
-                            <el-option label="Text" value="text" />
-                          </el-select>
-                        </template>
-                      </el-input>
-                      <span class="query-item" v-else @dblclick="editQuery(scope.row)">{{ scope.row.key }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Value">
-                    <template #default="scope">
-                      <el-upload
-                          v-if="scope.row.keyType == 'file'"
-                          ref="uploadRef"
-                          class="upload-file"
-                          :auto-upload="false">
-                        <template #trigger>
-                          <el-button type="primary" size="small">select file</el-button>
-                        </template>
-                      </el-upload>
-                      <el-input v-if="scope.row.keyType == 'text' && scope.row.status == 'edit'"
-                                v-model="scope.row.desc"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)"/>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Description">
-                    <template #default="scope">
-                      <el-input v-if="scope.row.status == 'edit'"
-                                v-model="scope.row.desc"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)"/>
-                      <span class="query-item" v-else @dblclick="editQuery(scope.row, )">{{ scope.row.desc }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column width="45">
-                    <template #default="scope">
-                      <span class="query-item query-item-del iconfont icon-line" @click="deleteQuery(scope.row, 'body')"></span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-                <el-table v-if="bodyType == 3" :data="urlEncodeDomainData" :class="urlEncodeDomainData.length == 0 ? 'query-table' : ''" empty-text="" style="width: 100%" border >
-                  <el-table-column width="40">
-                    <template #default="scope">
-                      <el-checkbox v-model="scope.row.check"></el-checkbox>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Key">
-                    <template #default="scope">
-                      <el-input v-if="scope.row.status == 'edit'"
-                                v-model="scope.row.key"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)"/>
-                      <span class="query-item" v-else @dblclick="editQuery(scope.row)">{{ scope.row.key }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Value">
-                    <template #default="scope">
-                      <el-input v-if="scope.row.status == 'edit'"
-                                v-model="scope.row.value"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)"/>
-                      <span class="query-item" v-else @dblclick="editQuery(scope.row, )">{{ scope.row.value }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="Description">
-                    <template #default="scope">
-                      <el-input v-if="scope.row.status == 'edit'"
-                                v-model="scope.row.desc"
-                                style="width: 100%"
-                                placeholder="Please input"
-                                @keyup.enter="updateQuery(scope.row)"/>
-                      <span class="query-item" v-else @dblclick="editQuery(scope.row, )">{{ scope.row.desc }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column width="45">
-                    <template #default="scope">
-                      <span class="query-item query-item-del iconfont icon-line" @click="deleteQuery(scope.row, 'body')"></span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-                <vue-json-pretty v-if="bodyType == 4" :data="{ 'key': 'value' }" :editable="true"/>
-                <div v-if="bodyType == 2 || bodyType == 3" class="query-tail iconfont icon-jia" @click="addQuery('body')"></div>
+                <ApiParams v-if="bodyType == 2" v-model="formDataTableData" type="form"></ApiParams>
+                <ApiParams v-if="bodyType == 3" v-model="urlEncodeDomainData"></ApiParams>
+                <div v-if="bodyType == 4" class="body-raw">
+                  <Codemirror
+                      v-model:value="code"
+                      :options="cmOptions"
+                      border
+                      height="200"
+                      width="99%">
+                  </Codemirror>
+                </div>
               </el-tab-pane>
 
             </el-tabs>
@@ -266,10 +92,49 @@
 </template>
 
 <script setup lang="ts">
-import VueJsonPretty from 'vue-json-pretty';
-import 'vue-json-pretty/lib/styles.css';
 import {ref} from 'vue';
 import {HeaderDomain, QueryDomain, FormDataDomain, UrlEncodeDomain} from "@/domain/RequestDomain.ts";
+
+import "codemirror/mode/javascript/javascript.js";
+import Codemirror from "codemirror-editor-vue3";
+import "codemirror/addon/lint/json-lint";
+
+// 主题样式（我直接用了纯白色的，看着比较舒服）
+import "codemirror/theme/rubyblue.css";
+// 括号显示匹配
+import "codemirror/addon/edit/matchbrackets";
+import "codemirror/addon/selection/active-line";
+// 括号、引号编辑和删除时成对出现
+import "codemirror/addon/edit/closebrackets";
+// 折叠代码要用到一些玩意
+import "codemirror/addon/fold/foldgutter.css";
+import "codemirror/addon/fold/foldgutter";
+import "codemirror/addon/fold/xml-fold";
+import "codemirror/addon/fold/foldcode";
+import "codemirror/addon/fold/brace-fold";
+import "codemirror/addon/fold/indent-fold.js";
+import "codemirror/addon/fold/markdown-fold.js";
+import "codemirror/addon/fold/comment-fold.js";
+import type { EditorConfiguration } from "codemirror";
+
+import ApiParams from "@/components/ApiParamsComponent.vue"
+
+
+
+const code = ref<string>('');
+
+const cmOptions: EditorConfiguration = {
+  mode: "application/json",
+  // theme: "base16-light", // 主题样式
+  lint: true,
+  tabSize: 2,
+  smartIndent: true, // 是否智能缩进
+  styleActiveLine: true, // 当前行高亮
+  lineNumbers: true, // 显示行号
+  lineWrapping: true, // 自动换行
+  matchBrackets: true, // 括号匹配显示
+  autoCloseBrackets: true, // 输入和退格时成对
+};
 
 const methodType = ref<string>('GET')
 const sendUrl = ref<string>();
@@ -329,85 +194,6 @@ urlEncodeDomainData.value = [
     check: true
   }
 ]
-
-const editQuery = (item: QueryDomain) => {
-  // tempQueryDomain.value.status = 'complete'
-  item.status = 'edit'
-}
-
-const updateQuery = (item: QueryDomain) => {
-  item.status = 'complete'
-}
-
-const addQuery = (type: string) => {
-  if (type == 'query') {
-    let item: QueryDomain = {
-      id: '4',
-      key: '',
-      value: '',
-      desc: '',
-      status: 'edit',
-      check: true
-    }
-    queryTableData.value.push(item)
-  }
-  if (type == 'header') {
-    let item: HeaderDomain = {
-      id: '4',
-      key: '',
-      value: '',
-      desc: '',
-      status: 'edit',
-      check: true
-    }
-    headerTableData.value.push(item)
-  }
-  if (type == 'body') {
-    if  (bodyType.value == 2) {
-      let item: FormDataDomain = {
-        id: '4',
-        key: '',
-        keyType: 'text',
-        filePath: '',
-        value: '',
-        desc: '',
-        status: 'edit',
-        check: true
-      }
-      formDataTableData.value.push(item)
-    }
-    if (bodyType.value == 3) {
-      let item: UrlEncodeDomain = {
-        id: '4',
-        key: '',
-        value: '',
-        desc: '',
-        status: 'edit',
-        check: true
-      }
-      urlEncodeDomainData.value.push(item)
-    }
-  }
-
-}
-
-const deleteQuery = (item: QueryDomain, type: string) => {
-  if (type == 'query') {
-    queryTableData.value.splice(queryTableData.value.indexOf(item), 1)
-  }
-  if (type == 'header'){
-    headerTableData.value.splice(headerTableData.value.indexOf(item), 1)
-  }
-
-  if (type == 'body') {
-    if (bodyType.value == 2) {
-      formDataTableData.value.splice(formDataTableData.value.indexOf(item), 1)
-    }
-    if (bodyType.value == 3) {
-      urlEncodeDomainData.value.splice(urlEncodeDomainData.value.indexOf(item), 1)
-    }
-  }
-}
 </script>
 
 <style scoped lang="scss">
@@ -489,6 +275,12 @@ const deleteQuery = (item: QueryDomain, type: string) => {
         line-height: 30px;
         border-radius: 3px;
         cursor: pointer;
+      }
+
+      .body-raw {
+        .codemirror-container.bordered {
+          border: 1px solid #e1e1e1
+        }
       }
     }
   }
