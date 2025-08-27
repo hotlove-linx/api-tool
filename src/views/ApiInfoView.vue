@@ -79,7 +79,6 @@
                   </Codemirror>
                 </div>
               </el-tab-pane>
-
             </el-tabs>
           </div>
         </el-splitter-panel>
