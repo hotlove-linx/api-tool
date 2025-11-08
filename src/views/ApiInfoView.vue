@@ -37,8 +37,6 @@
 
     <!-- 参数列表及结果 -->
     <div class="api-info-result">
-      <el-splitter layout="vertical">
-        <el-splitter-panel :min="250">
           <div class="api-request">
             <el-tabs v-model="activeName" >
               <!-- query 参数 -->
@@ -46,7 +44,14 @@
                 <div class="query-header">
                   Query Params
                 </div>
-                <ApiParams v-model="queryTableData" type="param"></ApiParams>
+                <el-splitter layout="vertical">
+                  <el-splitter-panel :min="250" class="panel-param">
+                      <ApiParams v-model="queryTableData" type="param"></ApiParams>
+                  </el-splitter-panel>
+                  <el-splitter-panel :min="200">
+                    <div class="api-response">2</div>
+                  </el-splitter-panel>
+                </el-splitter>
               </el-tab-pane>
 <!--              <el-tab-pane label="Authorization" name="authorization">Task</el-tab-pane>-->
               <!-- 请求头 -->
@@ -82,11 +87,7 @@
 
             </el-tabs>
           </div>
-        </el-splitter-panel>
-        <el-splitter-panel :min="200">
-          <div class="api-response">2</div>
-        </el-splitter-panel>
-      </el-splitter>
+
     </div>
   </div>
 </template>
@@ -235,18 +236,12 @@ urlEncodeDomainData.value = [
     .api-request {
       width: 100%;
 
-      .query-table {
-        ::v-deep(.el-table__body-wrapper) {
-          height: 0;
-          flex: none;
-        }
+      .panel-param {
+        height: 500px;
       }
 
       .query-header {
         margin-bottom: 10px;
-
-        .upload-file {
-        }
       }
 
       .query-item {
